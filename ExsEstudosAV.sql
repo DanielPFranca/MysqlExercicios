@@ -42,21 +42,10 @@ select Nome_RazaoSocial, LENGTH(Nome_RazaoSocial) as 'BYTES' from lcliente;
 
 select * from llicenca;
 
-select NumLicenca, count(DtAquisicao) from llicenca;
 
-SELECT NumLicenca, DATEDIFF(NOW(), DtAquisicao) as dias
-FROM llicenca;
-																			#REVER
-SELECT NumLicenca, DATEDIFF(NOW(), DtAquisicao) AS dias
+SELECT NumLicenca, DtAquisicao, DATEDIFF(NOW(), DtAquisicao) AS dias
 FROM llicenca
 GROUP BY NumLicenca;
-
-SELECT TIMESTAMPDIFF(day,'2003-02-01','2003-05-01'); 
-
-select day(DtAquisicao), count(*) from llicenca
-group by DtAquisicao;
-
-select * from llicenca;
 
 #########################################
 #I)
@@ -107,8 +96,9 @@ order by Nome_RazaoSocial asc;
 select * from lcliente order by Nome_RazaoSocial asc;
 select * from lsetor;
 
-select c.Nome_RazaoSocial, s.NomeSetor, c.UF from lcliente c
+select c.Nome_RazaoSocial, t.DescricaoTipo, s.NomeSetor, c.UF from lcliente c
 inner join lsetor s on c.idSETOR_FK = s.idSETOR
+inner join ltipo_empresa t on t.idTIPO_Empresa = c.idTIPO_Empresa_FK
 where c.UF in ('SP', 'RS', 'PR', 'MG');
 
 #########################################
@@ -119,10 +109,10 @@ select * from lcliente;
 select * from lversao;
 select * from llicenca;
 
-select s.NomeSoftware, v.Versao, c.Nome_RazaoSocial, l.DtAquisicao, t.DescricaoTipo, st.NomeSetor from llicenca l 
+select s.NomeSoftware, c.Nome_RazaoSocial, v.Versao, st.NomeSetor, t.DescricaoTipo, l.NumLicenca, l.DtAquisicao, l.ValorAquisicao from llicenca l 
 inner join lcliente c on c.idCLIENTE = l.idCLIENTE_FK
 inner join lsoftware s on s.idSOFTWARE = l.idSOFTWARE_FK_FK
-inner join lversao v on v.idSOFTWARE_FK = s.idSOFTWARE
+inner join lversao v on v.Versao = l.Versao_FK
 inner join ltipo_empresa t on t.idTIPO_Empresa = c.idTIPO_Empresa_FK
 inner join lsetor st on st.idSETOR = c.idSETOR_FK
 order by s.NomeSoftware, v.Versao,  l.DtAquisicao, c.Nome_RazaoSocial asc;
@@ -146,7 +136,7 @@ select * from llicenca;
 select * from lcliente;
 select * from lsetor;
 
-select count(idCliente) as 'Clientes farmacêuticos' from lcliente c
+select count(*) as 'Clientes farmacêuticos'  from lcliente c
 inner join lsetor s on s.idSETOR = c.idSETOR_FK
 where Nomesetor = 'Farmacautica';
 
@@ -156,7 +146,7 @@ select * from lcliente;
 select * from llicenca;
 
 
-select count(NumLicenca) as 'QTD', c.Nome_RazaoSocial  from lcliente c
+select count(NumLicenca) as 'QTD', c.Nome_RazaoSocial Cliente  from lcliente c
 inner join llicenca l on l.idCLIENTE_FK = c.idCLIENTE
 group by c.Nome_RazaoSocial
 order by c.Nome_RazaoSocial asc;
@@ -179,7 +169,8 @@ select * from llicenca;
 select * from lsetor;
 select * from lcliente;
 
-select s.NomeSetor, count(NumLicenca) as 'QTD' from lcliente c
+
+select s.NomeSetor, count(NumLicenca) as 'Qtd. Licenças' from lcliente c
 inner join llicenca l on l.idCLIENTE_FK = c.idCLIENTE            
 inner join lsetor s on s.idSETOR = c.idSETOR_FK
 group by NomeSetor order by NomeSetor asc;
@@ -191,10 +182,10 @@ select * from llicenca;
 select * from ltipo_empresa;
 select * from lcliente;
 
-select t.DescricaoTipo, count(NumLicenca) from lcliente c
-inner join llicenca l on l.idCLIENTE_FK = c.idCLIENTE                  ###  !!!   ###
+select t.DescricaoTipo, count(NumLicenca) as 'Qtd. Licenças' from lcliente c
+inner join llicenca l on l.idCLIENTE_FK = c.idCLIENTE
 inner join ltipo_empresa t on t.idTIPO_Empresa = c.idTIPO_Empresa_FK
-group by DescricaoTipo;
+group by t.DescricaoTipo, t.idTIPO_Empresa order by t.idTIPO_Empresa asc;
 
 #########################################
 #W)
@@ -203,43 +194,27 @@ select * from llicenca;
 select * from lsoftware;
 select * from lversao;
 
-select l.NumLicenca, s.NomeSoftware, v.Versao from llicenca l 
-inner join lsoftware s on s.idSOFTWARE = l.idSOFTWARE_FK_FK                    ###  !!!   ###
-inner join lversao v on v.Versao = l.Versao_FK;
-
-select count(NumLicenca), sub.NomeSoftware from (select l.NumLicenca, s.NomeSoftware, v.Versao from llicenca l 
-inner join lsoftware s on s.idSOFTWARE = l.idSOFTWARE_FK_FK
-inner join lversao v on v.Versao = l.Versao_FK) sub group by NomeSoftware;
-																						 ###  !!!   ###
-
-select count(NumLicenca), s.NomeSoftware from lsoftware s 
+select s.NomeSoftware, v.Versao, count(NumLicenca) as 'Total' from lsoftware s 
 inner join lversao v on s.idSOFTWARE = v.idSOFTWARE_FK
 inner join llicenca l on l.idSOFTWARE_FK_FK = s.idSOFTWARE
-group by NomeSoftware;
+group by NomeSoftware, v.Versao order by NomeSoftware, v.Versao asc;
 
-
-select *from llicenca;
 #########################################
 #X)
 select * from lcliente;
 select *from llicenca;
 select * from lsoftware;
 
-select s.NomeSoftware, count(NumLicenca) from lcliente c
+select c.Nome_RazaoSocial, count(NumLicenca) from lcliente c
 inner join llicenca l on c.idCLIENTE = l.idCLIENTE_FK
 inner join lsoftware s on s.idSOFTWARE - l.idSOFTWARE_FK_FK							###  !!!   ###
-group by NomeSoftware;
+group by c.Nome_RazaoSocial;
 
-select count(NumLicenca) from (select s.NomeSoftware, count(NumLicenca) from lcliente c
+
+select c.Nome_RazaoSocial, s.NomeSoftware, count(NumLicenca) from lcliente c
 inner join llicenca l on c.idCLIENTE = l.idCLIENTE_FK
 inner join lsoftware s on s.idSOFTWARE - l.idSOFTWARE_FK_FK
-group by NomeSoftware) sub 
-inner join lversa;
-
-select s.NomeSoftware, count(NumLicenca) from lcliente c
-inner join llicenca l on c.idCLIENTE = l.idCLIENTE_FK
-inner join lsoftware s on s.idSOFTWARE - l.idSOFTWARE_FK_FK
-group by NomeSoftware;
+group by c.Nome_RazaoSocial;
 
 
 #########################################
@@ -251,6 +226,7 @@ select * from llicenca;
 select count(NumLicenca) as 'Qtd', c.Nome_RazaoSocial from llicenca l 
 inner join lcliente c on l.idCLIENTE_FK = c.idCLIENTE
 group by idCLIENTE having Qtd > 10;
+
 
 
 

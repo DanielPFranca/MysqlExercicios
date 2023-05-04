@@ -205,17 +205,11 @@ select * from lcliente;
 select *from llicenca;
 select * from lsoftware;
 
-select c.Nome_RazaoSocial, count(NumLicenca) from lcliente c
-inner join llicenca l on c.idCLIENTE = l.idCLIENTE_FK
-inner join lsoftware s on s.idSOFTWARE - l.idSOFTWARE_FK_FK							###  !!!   ###
-group by c.Nome_RazaoSocial;
 
-
-select c.Nome_RazaoSocial, s.NomeSoftware, count(NumLicenca) from lcliente c
+select c.Nome_RazaoSocial, s.NomeSoftware, count(NumLicenca) as 'Licenças' from lcliente c
 inner join llicenca l on c.idCLIENTE = l.idCLIENTE_FK
 inner join lsoftware s on s.idSOFTWARE - l.idSOFTWARE_FK_FK
-group by c.Nome_RazaoSocial;
-
+group by c.Nome_RazaoSocial, s.NomeSoftware order by c.Nome_RazaoSocial, s.NomeSoftware asc;
 
 #########################################
 #Y)
@@ -226,12 +220,3 @@ select * from llicenca;
 select count(NumLicenca) as 'Qtd', c.Nome_RazaoSocial from llicenca l 
 inner join lcliente c on l.idCLIENTE_FK = c.idCLIENTE
 group by idCLIENTE having Qtd > 10;
-
-
-
-
-
-
-
-
-

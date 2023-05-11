@@ -23,13 +23,13 @@ order by DescricaoTipo asc;
 #########################################
 #E)
 
-select DescricaoTipo, idTIPO_Empresa, MID(DescricaoTipo, -5, 5) as '5 últimas letras' from ltipo_empresa
+select DescricaoTipo, idTIPO_Empresa, mid(DescricaoTipo, -5, 5) as '5 últimas letras' from ltipo_empresa
 order by DescricaoTipo desc;
 
 #########################################
 #F)
 select * from ltipo_empresa;
-select DescricaoTipo, idTIPO_Empresa, MID(DescricaoTipo, 6, 5) as 'Da 6 à 10 letra' from ltipo_empresa;
+select DescricaoTipo, idTIPO_Empresa, mid(DescricaoTipo, 6, 5) as 'Da 6 à 10 letra' from ltipo_empresa;
 
 #########################################
 #G)

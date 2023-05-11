@@ -57,7 +57,7 @@ select * from lsetor;
 #J)
 
 select s.NomeSoftware as 'Nome', v.Versao as 'Versão' from lsoftware s
-inner join lversao v on s.idSOFTWARE = v. idSOFTWARE_FK;
+inner join lversao v on s.idSOFTWARE = v. idSOFTWARE_FK order by NomeSoftware, Versao;
 
 select * from lversao;
 #########################################

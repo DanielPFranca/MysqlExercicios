@@ -35,7 +35,7 @@ select DescricaoTipo, idTIPO_Empresa, MID(DescricaoTipo, 6, 5) as 'Da 6 à 10 le
 #G)
 
 select * from lcliente;
-select Nome_RazaoSocial, LENGTH(Nome_RazaoSocial) as 'BYTES' from lcliente;
+select Nome_RazaoSocial, LENGTH(Nome_RazaoSocial) as 'BYTES' from lcliente order by Nome_RazaoSocial asc;
 
 #########################################
 #H)

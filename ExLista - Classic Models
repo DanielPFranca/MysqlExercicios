@@ -4,9 +4,11 @@ select * from employees;
 #############################################
 #A)
 
-select c.customerName, count(employeeNumber), e.lastName as 'Employees'  from customers c 
+select count(*) from (
+select distinct e.employeeNumber from customers c
 inner join employees e on c.salesRepEmployeeNumber = e.employeeNumber
-group by customerNumber;
+order by employeeNumber) sub;
+
 
 #############################################
 #B)

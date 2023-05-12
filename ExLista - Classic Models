@@ -55,9 +55,11 @@ group by employeeNumber;
 select * from products;
 select * from orderdetails;
 
-select p.productName, o.quantityOrdered  from orderdetails o 
+select p.productCode, p.productName, sum(o.quantityOrdered) as 'Total Vendidos'  from orderdetails o 
 inner join products p on p.productCode = o.productCode
-order by quantityOrdered desc limit 5;
+group by p.productCode 
+order by sum(o.quantityOrdered) desc limit 5;
+
 
 #############################################
 #G)

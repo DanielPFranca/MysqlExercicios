@@ -64,7 +64,15 @@ order by sum(o.quantityOrdered) desc limit 5;
 #############################################
 #G)
 
+select textDescription from (
+      select * from productlines) sub;
+      
+#############################################
+#H)
+select * from employees e where
+e.employeeNumber in (select c.salesRepEmployeeNumber from customers c);
 
+   
 
 
 
